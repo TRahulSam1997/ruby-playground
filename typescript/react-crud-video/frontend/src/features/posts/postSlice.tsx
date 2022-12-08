@@ -1,12 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
+import { fetchPosts } from "./postAPI";
 
 export enum Statuses {
-    
+    Initial = "Not Fetched",
+    Loading = "Loading...",
+    UpToDate = "Up To Date",
+    Deleted = "Deleted",
+    Error = "Error"
 }
 
-const initialState: any = {
+export interface PostState {
+    id?: number;
+    title?: string;
+    body?: string;
+    created_at?: any;
+    updated_at?: any;
+}
+
+export interface PostsState {
+    posts: PostState[];
+    status: string;
+}
+
+const initialState: PostsState = {
     posts: [
         {
             id: 0,
@@ -18,3 +36,42 @@ const initialState: any = {
     ],
     status: Statuses.Initial
 }
+
+export const fetchPostsAsync = createAsyncThunk(
+    'posts/fetchPosts',
+    async () => {
+        return await fetchPosts()
+    }
+)
+
+export const postSlice = createSlice({
+    name: "posts",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchPostsAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Loading;
+                })
+            })
+            .addCase(fetchPostsAsync.fulfilled, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.UpToDate;
+                })
+            })
+            .addCase(fetchPostsAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Error;
+                })
+            })
+    } 
+})
+
+export const {} = postSlice.actions;
+
+export const selectPosts = (state: RootState) => state.posts.posts;
+
+export const selectStatus = (state: RootState) => state.posts.status;
+
+export default postSlice.reducer;

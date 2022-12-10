@@ -35,8 +35,7 @@ function Posts() {
   return (
     <div>
         <h1>Posts</h1>
-        <h3>{status !== Statuses.UpToDate}</h3>
-          contents {status}
+        {contents}
     </div>
   ) 
 }

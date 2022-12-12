@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { fetchPosts } from "./postAPI";
+import { fetchPosts, createPost } from "./postAPI";
 
 export enum Statuses {
     Initial = "Not Fetched",
@@ -9,6 +9,14 @@ export enum Statuses {
     UpToDate = "Up To Date",
     Deleted = "Deleted",
     Error = "Error"
+}
+
+export interface PostFormData {
+    post: {
+        id?: string;
+        title: string;
+        body: string;
+    }
 }
 
 export interface PostState {
@@ -40,7 +48,14 @@ const initialState: PostsState = {
 export const fetchPostsAsync = createAsyncThunk(
     'posts/fetchPosts',
     async () => {
-        return await fetchPosts()
+        return await fetchPosts();
+    }
+)
+
+export const createPostAsync = createAsyncThunk(
+    "posts/createPost",
+    async (payload: PostFormData) => {
+        return await createPost(payload);
     }
 )
 
@@ -58,6 +73,23 @@ export const postSlice = createSlice({
             .addCase(fetchPostsAsync.fulfilled, (state, action) => {
                 return produce(state, (draftState) => {
                     draftState.posts = action.payload;
+                    draftState.status = Statuses.UpToDate;
+                })
+            })
+            .addCase(fetchPostsAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Error;
+                })
+            })
+            /** Update Section */
+            .addCase(fetchPostsAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Loading;
+                })
+            })
+            .addCase(fetchPostsAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    draftState.posts.push(action.payload);
                     draftState.status = Statuses.UpToDate;
                 })
             })

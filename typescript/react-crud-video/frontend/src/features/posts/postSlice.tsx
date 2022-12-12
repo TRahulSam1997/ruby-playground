@@ -82,18 +82,18 @@ export const postSlice = createSlice({
                 })
             })
             /** Update Section */
-            .addCase(fetchPostsAsync.pending, (state) => {
+            .addCase(createPostAsync.pending, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = Statuses.Loading;
                 })
             })
-            .addCase(fetchPostsAsync.fulfilled, (state, action) => {
+            .addCase(createPostAsync.fulfilled, (state, action) => {
                 return produce(state, (draftState) => {
                     draftState.posts.push(action.payload);
                     draftState.status = Statuses.UpToDate;
                 })
             })
-            .addCase(fetchPostsAsync.rejected, (state) => {
+            .addCase(createPostAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = Statuses.Error;
                 })

@@ -24,7 +24,7 @@ export async function createPost(payload: PostFormData) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-
+            post
         })
     })
     .then((res) => res.json())

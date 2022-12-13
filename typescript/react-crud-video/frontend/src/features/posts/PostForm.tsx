@@ -27,7 +27,7 @@ function resetState() {
 
   return (
     <div>
-      <h1>Form</h1>
+      <h1>Post Form</h1>
       <form>
         <input
           type="text"

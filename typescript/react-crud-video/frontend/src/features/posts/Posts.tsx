@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
@@ -10,6 +10,8 @@ function Posts() {
   const posts = useAppSelector(selectPosts);
   const status = useAppSelector(selectStatus)
   const dispatch = useDispatch<AppDispatch>();
+
+  const [postToEdit, setPostToEdit] = useState(0);
 
   useEffect(() => {
     dispatch(fetchPostsAsync());

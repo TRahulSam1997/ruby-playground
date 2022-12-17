@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { fetchPosts, createPost, destroyPost } from "./postAPI";
+import { fetchPosts, createPost, destroyPost, updatePost } from "./postAPI";
 
 export enum Statuses {
     Initial = "Not Fetched",
@@ -69,6 +69,13 @@ export const createPostAsync = createAsyncThunk(
         return await createPost(payload);
     }
 )
+ 
+export const updatePostAsync = createAsyncThunk(
+    'posts/updatePost',
+    async (payload: PostFormData) => {
+        return await updatePost(payload);
+    }
+)
 
 export const destroyPostAsync = createAsyncThunk(
     "posts/destroyPost",
@@ -129,6 +136,25 @@ export const postSlice = createSlice({
                 })
             })
             .addCase(destroyPostAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Error;
+                })
+            })
+            /** Update Section */
+            .addCase(updatePostAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = Statuses.Loading;
+                })
+            })
+            .addCase(updatePostAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    const index = draftState.posts.findIndex(
+                        post => post.id === action.payload.id); 
+                    draftState.posts[index] = action.payload;
+                    draftState.status = Statuses.UpToDate;
+                })
+            })
+            .addCase(updatePostAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = Statuses.Error;
                 })

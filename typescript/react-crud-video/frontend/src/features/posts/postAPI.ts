@@ -34,6 +34,24 @@ export async function createPost(payload: PostFormData) {
     })    
 }
 
+export async function updatePost(payload:PostFormData) {
+    const post = payload.post;
+    return fetch(`${API_URL}/posts/${post.id}.json`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            post,
+        }),
+    })
+    .then((res) => res.json())
+    .catch((err) => {
+        console.log("Error: ", err);
+        return {} as PostsState;
+    });
+}
+
 export async function destroyPost(payload: PostDeleteData) {
     const post = payload.post;
     return fetch(`${API_URL}/posts/${post.post_id}.json`, {
@@ -49,5 +67,5 @@ export async function destroyPost(payload: PostDeleteData) {
     .catch((e) => {
         console.log("Error: ", e);
         return {} as PostsState;
-    });  
+    });   
 }

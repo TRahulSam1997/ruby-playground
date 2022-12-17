@@ -56,6 +56,7 @@ function Post(props:any) {
             <ButtonGroup
               post_id={props.post.id}
               dispatch={props.dispatch}
+              toggleEditForm={props.toggleEditForm}
             />
           </div>
        </div>

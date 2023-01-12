@@ -13,4 +13,16 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.6, rbenv: 2.7.6) [gem]" level="application" />
   </component>
+  <component name="RakeTasksCache">
+    <option name="myRootTask">
+      <RakeTaskImpl id="rake">
+        <subtasks>
+          <RakeTaskImpl description="Remove any temporary products" fullCommand="clean" id="clean" />
+          <RakeTaskImpl description="Remove any generated files" fullCommand="clobber" id="clobber" />
+          <RakeTaskImpl description="" fullCommand="default" id="default" />
+          <RakeTaskImpl description="" fullCommand="test" id="test" />
+        </subtasks>
+      </RakeTaskImpl>
+    </option>
+  </component>
 </module>

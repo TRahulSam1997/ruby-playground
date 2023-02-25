@@ -65,3 +65,19 @@ def postorder_traversal(root)
   right_t = postorder_traversal(root.right)
   left_t + right_t + [root.val]
 end
+
+# @param {String} column_title
+# @return {Integer}
+def title_to_number(column_title)
+  result = 0
+  n = column_title.length
+
+  column_title.each_char.with_index do |char, i|
+    column_number = char.ord - 'A'.ord + 1
+    result += column_number * 26**(n - i - 1)
+  end
+
+  result
+end
+
+puts title_to_number('AB')
